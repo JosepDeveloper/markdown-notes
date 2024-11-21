@@ -1,0 +1,28 @@
+---
+import NoteIcon from './icons/note-icon.astro';
+import '@fontsource/luckiest-guy'
+
+interface Props {
+  class?: string;
+}
+
+const {class: className} = Astro.props;
+---
+
+<article class={className}>
+  <h1 class={"text-3xl text-balance font-normal flex"}>Markdown Notes</h1>
+
+  <nav class="mt-10">
+    <a href="#" class="text-balance flex items-center">
+      <NoteIcon class="w-6 h-6"/>
+      <span class="ml-2 hover:underline">Nueva Nota</span>
+    </a>
+  </nav>
+</article>
+
+
+<style>
+  h1 {
+    font-family: 'Luckiest Guy', cursive;
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/onest'
+import Analytics from '@vercel/analytics/astro'
 
 interface Props {
   title: string;
@@ -29,6 +30,7 @@ const {title} = Astro.props;
 </div>
 <div>
   <slot/>
+  <Analytics />
 </div>
 </body>
 </html>

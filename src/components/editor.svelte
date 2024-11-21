@@ -8,6 +8,11 @@
   let mode: EditorMode = $state('editor')
 
   let note: string = $state('')
+
+  function updateNote(e: Event) {
+    const target = e.target as HTMLTextAreaElement
+    note = target.value
+  }
 </script>
 
 <article class="ml-2 w-full border-r border-neutral-600 h-screen pr-2">
@@ -20,7 +25,7 @@
   </header>
 
   {#if mode === 'editor'}
-    <EditorTextarea onChange={(e: Event) => note = (e.target as HTMLTextAreaElement).value} value={note}/>
+    <EditorTextarea on:change={updateNote} bind:value={note}/>
   {:else}
     <ViewMarkdown source={note}/>
   {/if}

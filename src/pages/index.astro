@@ -11,3 +11,11 @@ import Editor from "../components/editor.svelte";
     <Editor client:load />
   </main>
 </Layout>
+
+<script>
+  const user = localStorage.getItem('username')
+
+  if (!user) {
+    window.location.href = '/login'
+  }
+</script>

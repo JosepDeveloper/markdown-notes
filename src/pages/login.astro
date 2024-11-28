@@ -39,9 +39,52 @@ import Layout from '../layouts/Layout.astro';
           Iniciar Sesión
         </button>
       </form>
+
       <a href="/register" class="text-sm text-muted-foreground text-white/70 hover:underline focus:underline">
         ¿No Tienes una cuenta? Registrate
+      </a>
+      <br />
+      <a href="/recover-password" class="text-sm text-muted-foreground text-white/70 hover:underline focus:underline">
+        ¿Olvidaste tu contraseña? Recuperar
       </a>
     </div>
   </main>
 </Layout>
+
+<script>
+  import {$} from "../lib/dom";
+
+  const $form = $('form') as HTMLFormElement
+
+  $form?.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    const data = Object.fromEntries(new FormData(event.target as HTMLFormElement))
+
+    const response = await fetch('/api/login.json', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const dataResponse = await response.json()
+
+    if (!response.ok) {
+      const {message} = dataResponse
+
+      if (message.startsWith('4')) {
+        alert('Datos invalidos')
+        return
+      }
+
+      alert('Este usuario no existe')
+      return
+    }
+
+    localStorage.setItem('username', dataResponse.data.username)
+    alert('Usuario iniciado sesión exitosamente')
+
+    window.location.href = '/'
+  })
+</script>

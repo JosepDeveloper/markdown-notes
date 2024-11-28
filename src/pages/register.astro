@@ -18,6 +18,7 @@ import Layout from '../layouts/Layout.astro'
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="elonmusk"
             name="username"
+            required
           >
         </div>
 
@@ -30,37 +31,42 @@ import Layout from '../layouts/Layout.astro'
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="********"
             name="password"
+            required
           >
         </div>
 
-        <div>
-          <label for="security-question" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pregunta
-            de Seguridad:</label>
-          <input
-            type="text"
-            id="security-question"
-            aria-describedby="helper-text-explanation"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Nombre de mi primera persona"
-            name="securityQuestion"
+        <div class="flex justify-center items-center gap-2">
+          <div class="flex-1">
+            <label for="recovery-code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo de
+              Recuperación:</label>
+            <input
+              type="text"
+              id="recovery-code"
+              aria-describedby="helper-text-explanation"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              name="recoveryCode"
+              readonly
+            >
+          </div>
+          <button
+            class="px-3 py-2 text-xs font-medium text-center text-white bg-gray-800 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300 h-1/5 self-end hover:bg-gray-700"
+            id="copy-recovery-code"
+            type="button"
           >
-        </div>
-
-        <div>
-          <label for="response-security-question" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Respuesta
-            de la Pregunta de Seguridad:</label>
-          <input
-            type="text"
-            id="response-security-question"
-            aria-describedby="helper-text-explanation"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Albatros"
-            name="responseSecurityQuestion"
+            Copiar
+          </button>
+          <button
+            class="px-3 py-2 text-xs font-medium text-center text-white bg-gray-800 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300 h-1/5 self-end hover:bg-gray-700"
+            id="reload-recovery-code"
+            type="button"
           >
+            Reload
+          </button>
         </div>
 
         <button
           class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-2/5 mt-4 self-end"
+          type="submit"
         >
           Registrarse
         </button>
@@ -74,14 +80,19 @@ import Layout from '../layouts/Layout.astro'
 
 <script>
   import {$} from "../lib/dom";
+  import {generatePassword} from "../lib/generate-password";
 
-  const $form = $('form')
+  const $form = $('form') as HTMLFormElement
+  const $inputRecoveryCode = $('#recovery-code') as HTMLInputElement
+  const $copyRecoveryCode = $('#copy-recovery-code') as HTMLButtonElement
+  const $reloadRecoveryCode = $('#reload-recovery-code') as HTMLButtonElement
+
+  $inputRecoveryCode.value = generatePassword()
 
   $form?.addEventListener('submit', async (event) => {
     event.preventDefault()
 
     const data = Object.fromEntries(new FormData(event.target as HTMLFormElement))
-
 
     const response = await fetch('/api/user.json', {
       method: 'POST',
@@ -104,8 +115,20 @@ import Layout from '../layouts/Layout.astro'
       return
     }
 
+    console.log(dataResponse.data)
+
+    localStorage.setItem('username', dataResponse.data.username)
     alert('Usuario guardado exitosamente')
 
     window.location.href = '/'
+  })
+
+  $copyRecoveryCode.addEventListener('click', () => {
+    navigator.clipboard.writeText($inputRecoveryCode.value)
+    alert('Codigo de recuperación copiado exitosamente')
+  })
+
+  $reloadRecoveryCode.addEventListener('click', () => {
+    $inputRecoveryCode.value = generatePassword()
   })
 </script>

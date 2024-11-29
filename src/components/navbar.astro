@@ -1,5 +1,6 @@
 ---
 import NoteIcon from './icons/note-icon.astro';
+import LogoutIcon from './icons/logout-icon.astro';
 import '@fontsource/luckiest-guy'
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 const {class: className} = Astro.props;
 ---
 
-<article class={className}>
+<article class={`${className} flex flex-col items-center gap-2`}>
   <h1 class={"text-3xl text-balance font-normal flex"}>Markdown Notes</h1>
 
   <nav class="mt-10">
@@ -18,6 +19,8 @@ const {class: className} = Astro.props;
       <span class="ml-2 hover:underline">Nueva Nota</span>
     </a>
   </nav>
+
+  <button class="py-2.5 px-5 me-2 mb-2 font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-xs flex justify-center items-center" id="logout"> <LogoutIcon class="w-6 h-6"/> Cerrar Sesión </button>
 </article>
 
 
@@ -26,3 +29,14 @@ const {class: className} = Astro.props;
     font-family: 'Luckiest Guy', cursive;
   }
 </style>
+
+<script>
+  import {$} from "../lib/dom";
+
+  const $logout = $('#logout') as HTMLButtonElement
+
+  $logout?.addEventListener('click', async () => {
+    localStorage.removeItem('username')
+    window.location.href = '/login'
+  })
+</script>

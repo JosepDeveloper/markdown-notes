@@ -1,5 +1,4 @@
 import {recoverPasswordSchema, userSchema} from '../../lib/schemas/user.ts'
-// @ts-ignore
 import bcrypt from 'bcrypt'
 import {prisma} from "../../lib/prisma.ts";
 

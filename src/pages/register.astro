@@ -82,6 +82,9 @@ import Layout from '../layouts/Layout.astro'
   import {$} from "../lib/dom";
   import {generatePassword} from "../lib/generate-password";
 
+  if (window.localStorage.getItem('username'))
+    window.location.href = '/'
+
   const $form = $('form') as HTMLFormElement
   const $inputRecoveryCode = $('#recovery-code') as HTMLInputElement
   const $copyRecoveryCode = $('#copy-recovery-code') as HTMLButtonElement

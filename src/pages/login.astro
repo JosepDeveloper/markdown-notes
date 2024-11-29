@@ -43,7 +43,7 @@ import Layout from '../layouts/Layout.astro';
       <a href="/register" class="text-sm text-muted-foreground text-white/70 hover:underline focus:underline">
         ¿No Tienes una cuenta? Registrate
       </a>
-      <br />
+      <br/>
       <a href="/recover-password" class="text-sm text-muted-foreground text-white/70 hover:underline focus:underline">
         ¿Olvidaste tu contraseña? Recuperar
       </a>
@@ -53,6 +53,9 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
   import {$} from "../lib/dom";
+
+  if (window.localStorage.getItem('username'))
+    window.location.href = '/'
 
   const $form = $('form') as HTMLFormElement
 
